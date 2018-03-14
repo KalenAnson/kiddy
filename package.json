@@ -1,0 +1,30 @@
+{
+  "name" : "kiddy",
+  "description": "Promise wrapper for node mysql connection pool handling",
+  "version": "0.1.0",
+  "main" : "index.js",
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "author": "Kalen Hall",
+  "license": "MIT",
+  "keywords": "promise, mysql, connection-pool",
+  "homepage": "https://github.com/KalenAnson/kiddy#readme",
+  "dependencies": {
+    "config": "*",
+    "mysql": "^2.15.0",
+    "q": "^1.5.1"
+  },
+  "files": [
+    "lib",
+    "LICENSE.md",
+    "README.md"
+  ],
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KalenAnson/kiddy.git"
+  }
+}
