@@ -117,8 +117,8 @@ You have two simple options to configure your database connection when using Kid
 ## API
 The Kiddy api is pretty straightforward.
 
-### setOptions
-promise __kiddy.setOptions(options)__
+### promise kiddy.setOptions(options)
+Optional method to override the default kiddy options at `/config/default.json`.
 #### Return
 Returns a promise which is resolved with a success message.
 
@@ -144,8 +144,8 @@ Accepts an object with the following properties defined:
 		database: "database"
 	}
 
-### touch
-promise __kiddy.touch()__
+### promise kiddy.touch()
+Get a MySQL connection from the connection pool. This method will lazly initialize the pool if it does not exist.
 #### Return
 Returns a promise which is resolved with a MySQL connection handle. You are advised to save the reference to the connection handle in order to release it when you are done.
 
@@ -170,8 +170,33 @@ On error, the promise is rejected with an error message.
 #### Arguments
 `kiddy.touch` does not accept any arguments or options.
 
-### release
-promise __kiddy.release(handle)__
+### promise kiddy.pq(options, values)
+Preform a promise wrapped MySQL query using the specified options.
+#### Return
+Returns a promise which is resolved with a MySQL result set.
+
+	.then(function (rows) {
+		console.log(rows); // The result set
+	})
+
+#### Error
+On error, the promise is rejected with an error message.
+
+	.fail(function (err) {
+		console.log(err); // Error message
+	})
+
+#### Arguments
+`kiddy.pq` accepts the same arguments that the underlying MySQL `conn.query` method accepts. These options can be:
+
+1. An SQL string
+2. An SQL string and an array of placeholder values
+3. An options object
+
+For more information, see [the documentation for the node-mysql package](https://github.com/mysqljs/mysql#performing-queries).
+
+### promise kiddy.release(handle)
+Releases a MySQL connection handle to the connection pool for reuse.
 #### Return
 Returns a promise which is resolved with a success message if the connection was released successfully.
 
@@ -187,4 +212,4 @@ On error, the promise is rejected with an error message.
 	})
 
 #### Arguments
-`kiddy.relase` does not accept any arguments or options.
+`kiddy.release` accepts one mandatory argument which is the connection to release.
