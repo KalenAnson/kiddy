@@ -170,7 +170,7 @@ On error, the promise is rejected with an error message.
 #### Arguments
 `kiddy.touch` does not accept any arguments or options.
 
-### promise kiddy.pq(options, values)
+### promise conn.pq(options, values)
 Preform a promise wrapped MySQL query using the specified options.
 #### Return
 Returns a promise which is resolved with a MySQL result set.
@@ -187,7 +187,7 @@ On error, the promise is rejected with an error message.
 	})
 
 #### Arguments
-`kiddy.pq` accepts the same arguments that the underlying MySQL `conn.query` method accepts. These options can be:
+`conn.pq` accepts the same arguments that the underlying MySQL `conn.query` method accepts. These options can be:
 
 1. An SQL string
 2. An SQL string and an array of placeholder values
