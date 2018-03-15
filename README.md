@@ -22,7 +22,7 @@ With the necessary configuration in place (see [Configuration](##Configuration) 
 		...
 	});
 
-This snippet will create a connection pool using your config defined connection parameters and get you a connection from the pool for immediate use. Error handling and
+This snippet will create a connection pool using your config defined connection parameters and get you a connection from the pool for immediate use.
 
 ## Normal Usage
 
