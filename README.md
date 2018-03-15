@@ -3,7 +3,7 @@
 ## Quick Start
 To install `kiddy` in your project run the following in your project root:
 
-	npm install  kiddy
+	npm install kiddy
 
 With the necessary configuration in place (see [Configuration](##Configuration) below), using Kiddy and MySQL promise wrapped queries is as simple as:
 
