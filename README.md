@@ -26,7 +26,7 @@ This snippet will create a connection pool using your config defined connection 
 
 ## Normal Usage
 
-To properly handle errors and release your connection when you are done, you code should look more like this:
+To properly handle errors and release your connection when you are done, you code should probably look more like this:
 
 	handle = null;
 	kiddy.touch()
@@ -36,8 +36,8 @@ To properly handle errors and release your connection when you are done, you cod
 		\*/
 		handle = conn;
 		/*\
-		|*| Database logic here, feel free to use the promise wrapped method
-		|*| handle.pq to preform a mysql conn.query.
+		|*| Database logic here, feel free to use the promise wrapped
+		|*| method handle.pq to preform a mysql conn.query.
 		\*/
 		return handle.pq('SELECT 1');
 	})
