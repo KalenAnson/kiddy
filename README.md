@@ -175,8 +175,94 @@ Preform a promise wrapped MySQL query using the specified options.
 #### Return
 Returns a promise which is resolved with a MySQL result set.
 
-	.then(function (rows) {
-		console.log(rows); // The result set
+	.then(function (result) {
+		console.log(result); // The result set
+	})
+
+#### Understanding Node-MySQL's Promise-Wrapped Results
+Remember, since a promise can only be resolved with a discrete value (primitive, array or object), the `result` above is actually a multi-dimensional array which looks like this:
+
+For `SELECT` statements:
+
+	[								// Outer array
+		[							// Inner array 0, array of result rows
+			RowDataPacket (object)
+		],
+		[							// Inner array 1, array of result fields
+			FieldPacket (object)
+		]
+	]
+
+For `INSERT`, `UPDATE` or `DELETE` statements:
+
+	[
+		OkPacket (object),
+		undefined
+	]
+
+Here is the breakdown on each of these low-level MySQL objects.
+
+`RowDataPacket` - An object where each property corresponds to one of the fields in the select statement. For example if you are  running the following query:
+
+	Select `id` FROM `mydb`.`mytable`
+
+An individual `RowDataPacket` object would be:
+
+	{
+		id: 2
+	}
+
+for the first row of the result set.
+
+`FieldPacket` - Field metadata containing the following properties:
+
+	{
+		catalog: 'def',
+		db: 'theDatabaseName',
+		table: 'theTableNameAlias',
+		orgTable: 'theTableName',
+		name: 'fieldNameAlias',
+		orgName: 'fieldName',
+		charsetNr: 63,				// The field's character set
+		length: 10,					// Size of the field
+		type: 3,					// Type of the field
+		flags: 16899,
+		decimals: 0,				// Number of decimals
+		default: undefined,			// The field's default value
+		zeroFill: false,			// Whether this field is zero filled
+		protocol41: true
+	}
+
+`OkPacket` - MySQL statement results containing the following properties:
+
+	{
+		fieldCount: 0,
+		affectedRows: 1,			// Number of rows affected by query
+		insertId: 0,				// AutoIncrement ID (if an INSERT)
+		serverStatus: 2,
+		warningCount: 0,
+		message: '(Rows matched: 1  Changed: 1  Warnings: 0',
+		protocol41: true,
+		changedRows: 1				// Rows that were changed by the query
+	}
+
+To make use of these promise resolved results, roll like this for a `SELECT` statement:
+
+	.then(function (data) {
+		var rows = data[0];
+		var fields = data[1];
+		console.log(rows.length);	// Your row count
+		console.log(rows[0]);		// Your first result
+		console.log(fields.length); // The number of fields in the results
+		console.log(fields[0]); 	// The first field's metadata
+	})
+
+and like this for `INSERT`, `UPDATE` or `DELETE` statements:
+
+	.then(function (data) {
+		var results = data[0];		// Your result object
+		var fields = data[1];		// Undefined, ignore this
+		console.log(results.affectedRows);	// Doing work son.
 	})
 
 #### Error
