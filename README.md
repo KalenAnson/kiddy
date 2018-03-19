@@ -1,4 +1,6 @@
 # Kiddy
+[![NPM](https://nodei.co/npm/kiddy.svg?downloads=true&downloadRank=true)](https://nodei.co/npm/kiddy/)&nbsp;&nbsp;
+[![Build Status](https://secure.travis-ci.org/KalenAnson/kiddy.svg?branch=master)](https://travis-ci.org/KalenAnson/kiddy)&nbsp;&nbsp;
 ## MySQL + Connection Pool + Promises
 ## Quick Start
 To install `kiddy` in your project run the following in your project root:
