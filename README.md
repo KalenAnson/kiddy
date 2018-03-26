@@ -9,16 +9,16 @@ To install `kiddy` in your project run the following in your project root:
 
 With the necessary configuration in place (see [Configuration](##Configuration) below), using Kiddy and MySQL promise wrapped queries is as simple as:
 
-	handle = null;
+	conn = null;
 	kiddy.touch()
-	.then(function (conn) {
-		handle = conn;
+	.then(function (connection) {
+		conn = connection;
 		/*\
 		|*| Database logic here.
 		|*| Feel free to use the method conn.pq to preform a promise wrapped
 		|*| mysql conn.query or the vanilla conn.query.
 		\*/
-		return handle.pq('SELECT 1');
+		return conn.pq('SELECT 1');
 	})
 	.fail(function (err) {
 		...
@@ -30,18 +30,18 @@ This snippet will create a connection pool using your config defined connection 
 
 To properly handle errors and release your connection when you are done, you code should probably look more like this:
 
-	handle = null;
+	conn = null;
 	kiddy.touch()
-	.then(function (conn) {
+	.then(function (connection) {
 		/*\
 		|*| Save connection handle to release later
 		\*/
-		handle = conn;
+		conn = connection;
 		/*\
 		|*| Database logic here, feel free to use the promise wrapped
 		|*| method handle.pq to preform a mysql conn.query.
 		\*/
-		return handle.pq('SELECT 1');
+		return conn.pq('SELECT 1');
 	})
 	.then(function (rows) {
 		/*\
@@ -51,10 +51,10 @@ To properly handle errors and release your connection when you are done, you cod
 		/*\
 		|*| When done, release the connection as shown below
 		\*/
-		return kiddy.release(handle);
+		return kiddy.release(conn);
 	})
 	.then(function (msg) {
-		handle = null;
+		conn = null;
 		console.log(msg); // Connection released
 	})
 	.fail(function (err) {
@@ -65,9 +65,9 @@ To properly handle errors and release your connection when you are done, you cod
 		/*\
 		|*| Release the handle if it is non-null
 		\*/
-		if (handle) {
-			kiddy.release(handle);
-			handle = null;
+		if (conn) {
+			kiddy.release(conn);
+			conn = null;
 		}
 	});
 
@@ -151,15 +151,15 @@ Get a MySQL connection from the connection pool. This method will lazly initiali
 #### Return
 Returns a promise which is resolved with a MySQL connection handle. You are advised to save the reference to the connection handle in order to release it when you are done.
 
-	.then(function (conn) {
+	.then(function (connection) {
 		/*\
 		|*| Save connection handle to release later
 		\*/
-		handle = conn;
+		conn = connection;
 		/*\
 		|*| `conn` is an instance of pool.getConnection with added magic
 		\*/
-		return handle.pq('SELECT 1');
+		return conn.pq('SELECT 1');
 	})
 
 #### Error
@@ -300,4 +300,4 @@ On error, the promise is rejected with an error message.
 	})
 
 #### Arguments
-`kiddy.release` accepts one mandatory argument which is the connection to release.
+`kiddy.release` accepts one mandatory argument which is the connection handle to release.
