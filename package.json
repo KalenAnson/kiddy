@@ -1,8 +1,8 @@
 {
-  "name" : "kiddy",
+  "name": "kiddy",
   "description": "Promise wrapper for node mysql connection pool handling",
-  "version": "0.4.0",
-  "main" : "index.js",
+  "version": "0.5.0",
+  "main": "index.js",
   "engines": {
     "node": ">=6.0.0"
   },
@@ -15,6 +15,9 @@
     "mysql": "^2.15.0",
     "q": "^1.5.1"
   },
+  "scripts": {
+    "test": "export NODE_CONFIG_DIR='tests/config/'; ava -v --timeout=10s tests/test.js"
+  },
   "files": [
     "lib",
     "LICENSE.md",
@@ -26,5 +29,8 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/KalenAnson/kiddy.git"
+  },
+  "devDependencies": {
+    "ava": "^0.25.0"
   }
 }
