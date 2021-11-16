@@ -30,7 +30,8 @@ This snippet will create a connection pool using your config defined connection 
 
 To properly handle errors and release your connection when you are done, you code should probably look more like this:
 
-	conn = null;
+	import * as kiddy from 'kiddy';
+	let conn = null;
 	kiddy.touch()
 	.then(function (connection) {
 		/*\
@@ -132,7 +133,7 @@ Returns a promise which is resolved with a success message.
 On error, the promise is rejected with an error message.
 
 	.fail(function (err) {
-		console.log(err); // Error message
+		console.log(err.message); // Error message
 	})
 
 #### Arguments
@@ -166,7 +167,7 @@ Returns a promise which is resolved with a MySQL connection handle. You are advi
 On error, the promise is rejected with an error message.
 
 	.fail(function (err) {
-		console.log(err); // Error message
+		console.log(err.message); // Error message
 	})
 
 #### Arguments
@@ -271,7 +272,7 @@ and like this for `INSERT`, `UPDATE` or `DELETE` statements:
 On error, the promise is rejected with an error message.
 
 	.fail(function (err) {
-		console.log(err); // Error message
+		console.log(err.message); // Error message
 	})
 
 #### Arguments
@@ -296,8 +297,29 @@ Returns a promise which is resolved with a success message if the connection was
 On error, the promise is rejected with an error message.
 
 	.fail(function (err) {
-		console.log(err); // Error message
+		console.log(err.message); // Error message
 	})
 
 #### Arguments
 `kiddy.release` accepts one mandatory argument which is the connection handle to release.
+
+### promise kiddy.drain(clear_cache = false)
+Attempts to drain the MySQL connection pool and close all active connections. After a connection pool is drained, attempts to reuse any connection handles that are still active will result in undefined behavior.
+
+A pool that has been drained can be refilled with a subsequent call to `kiddy.touch()` which will attempt to reconnect with cached credentials and refill the connection pool.
+#### Return
+Returns a promise which is resolved with a success message if the connection was released successfully.
+
+	.then(function (msg) {
+		console.log(msg); // Success
+	})
+
+#### Error
+On error, the promise is rejected with an error message.
+
+	.fail(function (err) {
+		console.log(err.message); // Error message
+	})
+
+#### Arguments
+`kiddy.drain` accepts one optional argument for whether or not the credential cache should be purged after the pool is drained. This option defaults to `true`. Pass in `false` to preserve the credential cache for later reuse.

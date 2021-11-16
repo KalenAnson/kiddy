@@ -3,8 +3,6 @@ sudo: false
 before_install:
   - npm update -g npm
 node_js:
-  - "9"
-  - "8"
-  - "7"
-  - "6"
-  - "4"
+  - "16"
+  - "14"
+  - "12"

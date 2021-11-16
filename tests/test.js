@@ -1,5 +1,5 @@
 import test from 'ava';
-import kiddy from '../lib/kiddy';
+import * as kiddy from '../lib/kiddy.js';
 import config from 'config';
 /*\
 |*| Make sure config is loaded
@@ -38,18 +38,24 @@ test('kiddy.release', t => {
 	t.is(typeof kiddy.release, 'function');
 });
 /*\
+|*| kiddy.drain
+\*/
+test('kiddy.drain', t => {
+	t.is(typeof kiddy.drain, 'function');
+});
+/*\
 |*| rejects invalid options
 \*/
 test('rejects null options', async t => {
-	const error = await t.throws(kiddy.setConfig() );
-	t.is(error, 'Kiddy: missing options');
+	const error = await t.throwsAsync(kiddy.setConfig() );
+	t.is(error.message, 'Kiddy: missing options');
 });
 /*\
 |*| rejects undefined user
 \*/
 test('rejects null user', async t => {
-	const error = await t.throws(kiddy.setConfig({}) );
-	t.is(error, 'Kiddy: invalid options, the user option is mandatory');
+	const error = await t.throwsAsync(kiddy.setConfig({}) );
+	t.is(error.message, 'Kiddy: invalid options, the user option is mandatory');
 });
 /*\
 |*| accepts valid options
@@ -63,7 +69,7 @@ test('accepts valid options', async t => {
 |*| rejects touch
 \*/
 test('touch rejected', async t => {
-	const error = await t.throws(kiddy.touch() );
+	const error = await t.throwsAsync(kiddy.touch() );
 	t.truthy(error instanceof Object);
 	t.is(typeof error.message, 'string');
 });
@@ -71,6 +77,13 @@ test('touch rejected', async t => {
 |*| rejects invalid release
 \*/
 test('release rejected', async t => {
-	const error = await t.throws(kiddy.release({}) );
-	t.is(error, 'Kiddy: unknown connection handle');
+	const error = await t.throwsAsync(kiddy.release({}) );
+	t.is(error.message, 'Kiddy: unknown connection handle');
+});
+/*\
+|*| allows drains to empty pool
+\*/
+test('drains empty pool', async t => {
+	const value = await kiddy.drain(true);
+	t.is(value, 'Drained');
 });
